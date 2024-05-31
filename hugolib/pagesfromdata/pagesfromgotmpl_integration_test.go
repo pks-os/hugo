@@ -38,7 +38,11 @@ draft: false
 -- layouts/partials/get-value.html --
 {{ $val := "p1" }}
 {{ return $val }}
+-- layouts/_default/baseof.html --
+Baseof:
+{{ block "main" . }}{{ end }}
 -- layouts/_default/single.html --
+{{ define "main" }}
 Single: {{ .Title }}|{{ .Content }}|Params: {{ .Params.param1 }}|Path: {{ .Path }}|
 Dates: Date: {{ .Date.Format "2006-01-02" }}|Lastmod: {{ .Lastmod.Format "2006-01-02" }}|PublishDate: {{ .PublishDate.Format "2006-01-02" }}|ExpiryDate: {{ .ExpiryDate.Format "2006-01-02" }}|
 Len Resources: {{ .Resources | len }}
@@ -48,6 +52,7 @@ Featured Image: {{ .RelPermalink }}|{{ .Name }}|
 {{ with .Resize "10x10" }}
 Resized Featured Image: {{ .RelPermalink }}|{{ .Width }}|
 {{ end}}
+{{ end }}
 {{ end }}
 -- layouts/_default/list.html --
 List: {{ .Title }}|{{ .Content }}|
@@ -584,4 +589,57 @@ value: data1
 	b = hugolib.Test(t, files, hugolib.TestOptWarn())
 
 	b.AssertLogNotContains("WARN")
+}
+
+func TestPagesFromGoTmplShortcodeNoPreceddingCharacterIssue12544(t *testing.T) {
+	t.Parallel()
+
+	files := `
+-- hugo.toml --
+disableKinds = ['home','rss','section','sitemap','taxonomy','term']
+-- content/_content.gotmpl --
+{{ $content := dict "mediaType" "text/html" "value" "x{{< sc >}}" }}
+{{ .AddPage (dict "content" $content "path" "a") }}
+
+{{ $content := dict "mediaType" "text/html" "value" "{{< sc >}}" }}
+{{ .AddPage (dict "content" $content "path" "b") }}
+-- layouts/_default/single.html --
+|{{ .Content }}|
+-- layouts/shortcodes/sc.html --
+foo
+{{- /**/ -}}
+`
+
+	b := hugolib.Test(t, files)
+
+	b.AssertFileContent("public/a/index.html", "|xfoo|")
+	b.AssertFileContent("public/b/index.html", "|foo|") // fails
+}
+
+func TestPagesFromGoTmplMenus(t *testing.T) {
+	t.Parallel()
+
+	files := `
+-- hugo.toml --
+disableKinds = ['rss','section','sitemap','taxonomy','term']
+
+[menus]
+[[menus.main]]
+name = "Main"
+[[menus.footer]]
+name = "Footer"
+-- content/_content.gotmpl --
+{{ .AddPage (dict "path" "p1" "title" "p1" "menus" "main" ) }}
+{{ .AddPage (dict "path" "p2" "title" "p2" "menus" (slice "main" "footer")) }}
+-- layouts/index.html --
+Main: {{ range index site.Menus.main }}{{ .Name }}|{{ end }}|
+Footer: {{ range index site.Menus.footer }}{{ .Name }}|{{ end }}|
+
+`
+	b := hugolib.Test(t, files)
+
+	b.AssertFileContent("public/index.html",
+		"Main: Main|p1|p2||",
+		"Footer: Footer|p2||",
+	)
 }
