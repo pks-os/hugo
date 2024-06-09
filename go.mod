@@ -2,7 +2,7 @@ module github.com/gohugoio/hugo
 
 require (
 	github.com/BurntSushi/locker v0.0.0-20171006230638-a6e239ea1c69
-	github.com/alecthomas/chroma/v2 v2.13.0
+	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/armon/go-radix v1.0.1-0.20221118154546-54df44f2176c
 	github.com/aws/aws-sdk-go-v2 v1.26.1
 	github.com/aws/aws-sdk-go-v2/service/cloudfront v1.35.4
@@ -25,7 +25,7 @@ require (
 	github.com/cli/safeexec v1.0.1
 	github.com/disintegration/gift v1.2.1
 	github.com/dustin/go-humanize v1.0.1
-	github.com/evanw/esbuild v0.20.2
+	github.com/evanw/esbuild v0.21.4
 	github.com/fatih/color v1.16.0
 	github.com/fortytw2/leaktest v1.3.0
 	github.com/frankban/quicktest v1.14.6
