@@ -413,12 +413,12 @@ func DecodeServer(cfg Provider) (Server, error) {
 
 // Pagination configures the pagination behavior.
 type Pagination struct {
-	//  Default number of elements per page in pagination.
-	DefaultPageSize int
+	//  Default number of elements per pager in pagination.
+	PagerSize int
 
 	// The path element used during pagination.
 	Path string
 
-	// WHether to disable generation of alias for the first pagination page.
+	// Whether to disable generation of alias for the first pagination page.
 	DisableAliases bool
 }
