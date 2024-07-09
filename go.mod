@@ -67,19 +67,19 @@ require (
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/fsync v0.10.1
 	github.com/spf13/pflag v1.0.5
-	github.com/tdewolff/minify/v2 v2.20.20
-	github.com/tdewolff/parse/v2 v2.7.13
+	github.com/tdewolff/minify/v2 v2.20.36
+	github.com/tdewolff/parse/v2 v2.7.15
 	github.com/yuin/goldmark v1.7.4
 	github.com/yuin/goldmark-emoji v1.0.3
 	go.uber.org/automaxprocs v1.5.3
 	gocloud.dev v0.36.0
 	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
-	golang.org/x/image v0.16.0
+	golang.org/x/image v0.18.0
 	golang.org/x/mod v0.17.0
 	golang.org/x/net v0.25.0
 	golang.org/x/sync v0.7.0
-	golang.org/x/text v0.15.0
-	golang.org/x/tools v0.20.0
+	golang.org/x/text v0.16.0
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d
 	google.golang.org/api v0.152.0
 	gopkg.in/yaml.v2 v2.4.0
 )
