@@ -11,34 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package identity
+package resources
 
 import (
+	"os"
 	"testing"
-
-	qt "github.com/frankban/quicktest"
 )
 
-func TestHashString(t *testing.T) {
-	c := qt.New(t)
+func BenchmarkHashImage(b *testing.B) {
+	f, err := os.Open("testdata/sunset.jpg")
+	if err != nil {
+		b.Fatal(err)
+	}
+	defer f.Close()
 
-	c.Assert(HashString("a", "b"), qt.Equals, "2712570657419664240")
-	c.Assert(HashString("ab"), qt.Equals, "590647783936702392")
-
-	var vals []any = []any{"a", "b", tstKeyer{"c"}}
-
-	c.Assert(HashString(vals...), qt.Equals, "12599484872364427450")
-	c.Assert(vals[2], qt.Equals, tstKeyer{"c"})
-}
-
-type tstKeyer struct {
-	key string
-}
-
-func (t tstKeyer) Key() string {
-	return t.key
-}
-
-func (t tstKeyer) String() string {
-	return "key: " + t.key
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, err := hashImage(f)
+		if err != nil {
+			b.Fatal(err)
+		}
+		f.Seek(0, 0)
+	}
 }
